@@ -787,10 +787,10 @@ class Collection(object):
                 if isinstance(doc_copy[field], list):
                     # find the first item that matches
                     matched = False
-                    for item in doc_copy[field]:
+                    for (item, item_cpy) in zip(doc[field], doc_copy[field]):
                         if filter_applies(op['$elemMatch'], item):
                             matched = True
-                            doc_copy[field] = [item]
+                            doc_copy[field] = [item_cpy]
                             break
 
                     # nothing have matched

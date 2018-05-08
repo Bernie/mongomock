@@ -1070,6 +1070,13 @@ class CollectionAPITest(TestCase):
         expect = [{'_id': 1, 'list': [{"index": 1}, {"index": 2}]}]
         self.assertEqual(expect, list(actual))
 
+    def test__projection_elem_match_before_field_selection(self):
+        self.db.collection.insert(
+            {'_id': 1, 'list': [{'sub_id': 1, 'sub_attr': 'a'}, {'sub_id': 2, 'sub_attr': 'b'}]})
+        actual = self.db.collection.find_one({'_id': 1}, {'list': {'$elemMatch': {'sub_id': 1}}, 'list.sub_attr': 1})
+        expect = {'_id': 1, 'list': [{'sub_attr': 'a'}]}
+        self.assertEqual(expect, actual)
+
     def test__with_options(self):
         self.db.collection.with_options(read_preference=None)
 
